@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 AndroidX.Activity.ActivityFlags
 AndroidX.Activity.ActivityViewModelLazyKt
 AndroidX.Activity.BackEventCompat
@@ -119,15 +119,10 @@ AndroidX.Activity.Result.ActivityResult.ResultCode.get -> int
 AndroidX.Activity.Result.ActivityResult.WriteToParcel(Android.OS.Parcel! dest, Android.OS.ParcelableWriteFlags flags) -> void
 AndroidX.Activity.Result.ActivityResultCallerKt
 AndroidX.Activity.Result.ActivityResultKt
-AndroidX.Activity.Result.ActivityResultCallback<TResult>
-AndroidX.Activity.Result.ActivityResultCallback<TResult>.ActivityResultCallback(System.Action<TResult?>! callback) -> void
-AndroidX.Activity.Result.ActivityResultCallback<TResult>.OnActivityResult(TResult? result) -> void
 AndroidX.Activity.Result.ActivityResultLauncher
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Launch(TInput? input) -> void
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Launch(TInput? input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-AndroidX.Activity.Result.ActivityResultLauncher<TInput>.RawContract.get -> AndroidX.Activity.Result.Contract.ActivityResultContract!
-AndroidX.Activity.Result.ActivityResultLauncher<TInput>.RawLauncher.get -> AndroidX.Activity.Result.ActivityResultLauncher!
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Unregister() -> void
 AndroidX.Activity.Result.ActivityResultLauncher.ActivityResultLauncher() -> void
 AndroidX.Activity.Result.ActivityResultLauncher.ActivityResultLauncher(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
@@ -146,19 +141,17 @@ AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>
 AndroidX.Activity.Result.Contract.ActivityResultContract.ActivityResultContract() -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract.ActivityResultContract(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult
-AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult<TResult>
-AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult<TResult>.SynchronousResult(TResult? value) -> void
-AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult<TResult>.Value.get -> TResult?
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.SynchronousResult(Java.Lang.Object? value) -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.Value.get -> Java.Lang.Object?
 AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract! rawContract) -> void
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract! rawContract, System.Func<TInput?, Java.Lang.Object?>! inputMarshaler, System.Func<Java.Lang.Object?, TResult?>! outputMarshaler) -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.CreateIntent(Android.Content.Context! context, TInput? input) -> Android.Content.Intent!
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.GetSynchronousResult(Android.Content.Context! context, TInput? input) -> AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult<TResult>?
 AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.ParseResult(int resultCode, Android.Content.Intent? intent) -> TResult?
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.RawContract.get -> AndroidX.Activity.Result.Contract.ActivityResultContract!
-AndroidX.Activity.Result.Contract.ActivityResultContractTypedExtensions
+AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.Register(AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
+AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.Register(AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Lifecycle.ILifecycleOwner! lifecycleOwner, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
+AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.ActivityResultRegistry! registry, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
+AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! caller, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
 AndroidX.Activity.Result.Contract.ActivityResultContracts
+AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo.CaptureVideo() -> void
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo.CaptureVideo(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
@@ -247,9 +240,7 @@ AndroidX.Activity.Result.Contract.ActivityResultContracts.TakeVideo.GetSynchrono
 AndroidX.Activity.Result.Contract.ActivityResultContracts.TakeVideo.TakeVideo() -> void
 AndroidX.Activity.Result.Contract.ActivityResultContracts.TakeVideo.TakeVideo(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
 AndroidX.Activity.Result.IActivityResultCallback
-AndroidX.Activity.Result.IActivityResultCallback<TResult>
 AndroidX.Activity.Result.IActivityResultCallback.OnActivityResult(Java.Lang.Object? result) -> void
-AndroidX.Activity.Result.IActivityResultCallback<TResult>.OnActivityResult(TResult? result) -> void
 AndroidX.Activity.Result.IActivityResultCaller
 AndroidX.Activity.Result.IActivityResultCaller.RegisterForActivityResult(AndroidX.Activity.Result.Contract.ActivityResultContract! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, AndroidX.Activity.Result.IActivityResultCallback! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
 AndroidX.Activity.Result.IActivityResultCaller.RegisterForActivityResult(AndroidX.Activity.Result.Contract.ActivityResultContract! contract, AndroidX.Activity.Result.IActivityResultCallback! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
@@ -287,7 +278,6 @@ AndroidX.Activity.Result.PickVisualMediaRequest.MaxItems.get -> int
 AndroidX.Activity.Result.PickVisualMediaRequest.MediaCapabilitiesForTranscoding.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.MediaCapabilities?
 AndroidX.Activity.Result.PickVisualMediaRequest.MediaType.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.IVisualMediaType!
 AndroidX.Activity.Result.PickVisualMediaRequestKt
-AndroidX.Activity.Result.TypedActivityResultExtensions
 AndroidX.Activity.SystemBarStyle
 AndroidX.Activity.SystemBarStyle.Companion
 AndroidX.Activity.SystemBarStyle.Companion.Auto(int lightScrim, int darkScrim) -> AndroidX.Activity.SystemBarStyle!
@@ -483,18 +473,27 @@ static AndroidX.Activity.Result.ActivityResult.Creator.get -> Android.OS.IParcel
 static AndroidX.Activity.Result.ActivityResult.ResultCodeToString(int resultCode) -> string!
 static AndroidX.Activity.Result.ActivityResultCallerKt.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! obj, AndroidX.Activity.Result.Contract.ActivityResultContract! contract, Java.Lang.Object? input, AndroidX.Activity.Result.ActivityResultRegistry! registry, Kotlin.Jvm.Functions.IFunction1! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
 static AndroidX.Activity.Result.ActivityResultCallerKt.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! obj, AndroidX.Activity.Result.Contract.ActivityResultContract! contract, Java.Lang.Object? input, Kotlin.Jvm.Functions.IFunction1! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
-static AndroidX.Activity.Result.Contract.ActivityResultContractTypedExtensions.AsTyped<TInput,TResult>(this AndroidX.Activity.Result.Contract.ActivityResultContract! contract) -> AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.CaptureVideo() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Java.Lang.Boolean!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.CreateDocument() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.String!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.GetContent() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.String!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.GetMultipleContents() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.String!, Java.Util.IList!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenDocument() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Interop.JavaArray<Java.Lang.String!>!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenDocumentTree() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenMultipleDocuments() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Interop.JavaArray<Java.Lang.String!>!, Java.Util.IList!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickContact() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.Void!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickMultipleVisualMedia() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest!, Java.Util.IList!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickVisualMedia() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest!, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.RequestMultiplePermissions() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Interop.JavaArray<Java.Lang.String!>!, Java.Util.IMap!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.RequestPermission() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.String!, Java.Lang.Boolean!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.StartActivityForResult() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Content.Intent!, AndroidX.Activity.Result.ActivityResult!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.StartIntentSenderForResult() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.IntentSenderRequest!, AndroidX.Activity.Result.ActivityResult!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakePicture() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Java.Lang.Boolean!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakePicturePreview() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.Void!, Android.Graphics.Bitmap!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakeVideo() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Android.Graphics.Bitmap!>!
 static AndroidX.Activity.Result.ActivityResultKt.Component1(AndroidX.Activity.Result.ActivityResult! obj) -> int
 static AndroidX.Activity.Result.ActivityResultKt.Component2(AndroidX.Activity.Result.ActivityResult! obj) -> Android.Content.Intent?
 static AndroidX.Activity.Result.ActivityResultLauncherKt.Launch(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherKt.LaunchUnit(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-static AndroidX.Activity.Result.TypedActivityResultExtensions.AsTyped<TInput>(this AndroidX.Activity.Result.ActivityResultLauncher! launcher, System.Func<TInput?, Java.Lang.Object?>? inputMarshaler) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.Register<TInput,TResult>(this AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.IActivityResultCallback<TResult!>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.Register<TInput,TResult>(this AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Lifecycle.ILifecycleOwner! lifecycleOwner, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.IActivityResultCallback<TResult!>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, AndroidX.Activity.Result.IActivityResultCallback<TResult!>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.IActivityResultCallback<TResult!>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-static AndroidX.Activity.Result.TypedActivityResultExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.PhotosTab.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.PhotosTab!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.ImageAndVideo.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.ImageAndVideo!

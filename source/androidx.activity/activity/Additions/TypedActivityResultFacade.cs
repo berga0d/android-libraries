@@ -1,332 +1,198 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using Android.Content;
-using Android.Runtime;
 using AndroidX.Core.App;
 using Java.Interop;
 
 namespace AndroidX.Activity.Result
 {
-internal static class ActivityResultFacadeMarshal
-{
-    public static Java.Lang.Object? ToJavaObject<T>(T? value)
+    sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object, global::AndroidX.Activity.Result.IActivityResultCallback
     {
-        if (value is null)
-            return null;
+        readonly Action<TResult?> callback;
+        readonly Func<Java.Lang.Object?, TResult?> outputCast;
 
-        if (value is Java.Lang.Object javaObject)
-            return javaObject;
-
-        object boxed = value;
-        return boxed switch
+        public ActivityResultCallbackAdapter(Action<TResult?> callback, Func<Java.Lang.Object?, TResult?> outputCast)
         {
-            string stringValue => new Java.Lang.String(stringValue),
-            bool boolValue => Java.Lang.Boolean.ValueOf(boolValue),
-            int intValue => Java.Lang.Integer.ValueOf(intValue),
-            long longValue => Java.Lang.Long.ValueOf(longValue),
-            float floatValue => Java.Lang.Float.ValueOf(floatValue),
-            double doubleValue => Java.Lang.Double.ValueOf(doubleValue),
-            string[] stringArrayValue => Java.Lang.Object.GetObject<Java.Lang.Object>(JNIEnv.NewArray(stringArrayValue), JniHandleOwnership.TransferLocalRef),
-            _ => throw new InvalidCastException($"Cannot marshal type '{boxed.GetType().FullName}' to Java.Lang.Object. Supported types: string, bool, int, long, float, double, string[], and Java.Lang.Object-derived types."),
-        };
-    }
-
-    public static T? FromJavaObject<T>(Java.Lang.Object? value)
-    {
-        if (value is null)
-            return default;
-
-        if (value is T typed)
-            return typed;
-
-        object? converted = TryConvertFromJavaObject(typeof(T), value);
-        if (converted is T convertedTyped)
-            return convertedTyped;
-
-        throw new InvalidCastException($"Cannot convert Java value '{value.GetType().FullName}' to '{typeof(T).FullName}'. Supported conversions include Java.Lang.String->string, Java.Lang.Boolean->bool, Java.Lang.Integer->int, Java.Lang.Long->long, Java.Lang.Float->float, Java.Lang.Double->double, Java.Util.Map->IDictionary<string,bool>, and Java.Util.List->IList<Android.Net.Uri>.");
-    }
-
-    static object? TryConvertFromJavaObject(Type targetType, Java.Lang.Object value)
-    {
-        var effectiveType = Nullable.GetUnderlyingType(targetType) ?? targetType;
-
-        if (effectiveType == typeof(string))
-            return value.ToString();
-
-        if (effectiveType == typeof(bool))
-            return (value as Java.Lang.Boolean)?.BooleanValue();
-
-        if (effectiveType == typeof(int))
-            return (value as Java.Lang.Integer)?.IntValue();
-
-        if (effectiveType == typeof(long))
-            return (value as Java.Lang.Long)?.LongValue();
-
-        if (effectiveType == typeof(float))
-            return (value as Java.Lang.Float)?.FloatValue();
-
-        if (effectiveType == typeof(double))
-            return (value as Java.Lang.Double)?.DoubleValue();
-
-        if (effectiveType == typeof(IDictionary<string, bool>))
-        {
-            var javaDictionary = Android.Runtime.JavaDictionary<string, Java.Lang.Boolean>.FromJniHandle(value.Handle, JniHandleOwnership.DoNotTransfer);
-            var dictionary = new Dictionary<string, bool>(javaDictionary.Count);
-            foreach (var pair in javaDictionary)
-                dictionary[pair.Key] = pair.Value.BooleanValue();
-            return dictionary;
+            this.callback = callback ?? throw new ArgumentNullException(nameof(callback));
+            this.outputCast = outputCast ?? throw new ArgumentNullException(nameof(outputCast));
         }
 
-        if (effectiveType == typeof(IList<Android.Net.Uri>))
-            return Android.Runtime.JavaList<Android.Net.Uri>.FromJniHandle(value.Handle, JniHandleOwnership.DoNotTransfer);
-
-        return null;
+        public void OnActivityResult(Java.Lang.Object? result)
+            => callback(outputCast(result));
     }
-}
+
+    public sealed class ActivityResultLauncher<TInput>
+    {
+        readonly global::AndroidX.Activity.Result.ActivityResultLauncher rawLauncher;
+        readonly Func<TInput?, Java.Lang.Object?> inputCast;
+
+        internal ActivityResultLauncher(global::AndroidX.Activity.Result.ActivityResultLauncher rawLauncher, Func<TInput?, Java.Lang.Object?> inputCast)
+        {
+            this.rawLauncher = rawLauncher ?? throw new ArgumentNullException(nameof(rawLauncher));
+            this.inputCast = inputCast ?? throw new ArgumentNullException(nameof(inputCast));
+        }
+
+        public void Launch(TInput? input)
+            => rawLauncher.Launch(inputCast(input));
+
+        public void Launch(TInput? input, ActivityOptionsCompat? options)
+            => rawLauncher.Launch(inputCast(input), options);
+
+        public void Unregister()
+            => rawLauncher.Unregister();
+    }
 }
 
 namespace AndroidX.Activity.Result.Contract
 {
-
-public partial class ActivityResultContract
-{
-    public sealed class SynchronousResult<TResult>
+    public sealed class ActivityResultContract<TInput, TResult>
     {
-        public SynchronousResult(TResult? value)
+        readonly ActivityResultContract rawContract;
+
+        public ActivityResultContract(ActivityResultContract rawContract)
         {
-            Value = value;
+            this.rawContract = rawContract ?? throw new ArgumentNullException(nameof(rawContract));
         }
 
-        public TResult? Value { get; }
+        internal Java.Lang.Object? MarshalInput(TInput? input)
+        {
+            if (input is null)
+                return null;
 
-        internal ActivityResultContract.SynchronousResult ToRaw()
-            => new ActivityResultContract.SynchronousResult(ActivityResultFacadeMarshal.ToJavaObject(Value));
+            if (input is Java.Lang.Object javaObject)
+                return javaObject;
 
-        internal static SynchronousResult<TResult>? FromRaw(ActivityResultContract.SynchronousResult? raw)
-            => raw is null ? null : new SynchronousResult<TResult>(ActivityResultFacadeMarshal.FromJavaObject<TResult>(raw.Value));
+            throw new InvalidCastException($"Cannot marshal '{typeof(TInput).FullName}' to Java.Lang.Object. Use Java-bound types for typed activity-result wrappers.");
+        }
+
+        internal TResult? MarshalOutput(Java.Lang.Object? output)
+        {
+            if (output is null)
+                return default;
+
+            if (output is TResult typed)
+                return typed;
+
+            throw new InvalidCastException($"Cannot cast '{output.GetType().FullName}' to '{typeof(TResult).FullName}'.");
+        }
+
+        public Intent CreateIntent(Context context, TInput? input)
+            => rawContract.CreateIntent(context, MarshalInput(input));
+
+        public TResult? ParseResult(int resultCode, Intent? intent)
+            => MarshalOutput(rawContract.ParseResult(resultCode, intent));
+
+        public ActivityResultContract.SynchronousResult? GetSynchronousResult(Context context, TInput? input)
+            => rawContract.GetSynchronousResult(context, MarshalInput(input));
+
+        public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(global::AndroidX.Activity.Result.IActivityResultCaller caller, Action<TResult?> callback)
+        {
+            if (caller is null)
+                throw new ArgumentNullException(nameof(caller));
+            if (callback is null)
+                throw new ArgumentNullException(nameof(callback));
+
+            var rawCallback = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, MarshalOutput);
+            var launcher = caller.RegisterForActivityResult(rawContract, rawCallback);
+            return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, MarshalInput);
+        }
+
+        public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(global::AndroidX.Activity.Result.IActivityResultCaller caller, global::AndroidX.Activity.Result.ActivityResultRegistry registry, Action<TResult?> callback)
+        {
+            if (caller is null)
+                throw new ArgumentNullException(nameof(caller));
+            if (registry is null)
+                throw new ArgumentNullException(nameof(registry));
+            if (callback is null)
+                throw new ArgumentNullException(nameof(callback));
+
+            var rawCallback = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, MarshalOutput);
+            var launcher = caller.RegisterForActivityResult(rawContract, registry, rawCallback);
+            return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, MarshalInput);
+        }
+
+        public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, Action<TResult?> callback)
+        {
+            if (registry is null)
+                throw new ArgumentNullException(nameof(registry));
+            if (callback is null)
+                throw new ArgumentNullException(nameof(callback));
+
+            var rawCallback = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, MarshalOutput);
+            var launcher = registry.Register(key, rawContract, rawCallback);
+            return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, MarshalInput);
+        }
+
+        public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, global::AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner, Action<TResult?> callback)
+        {
+            if (registry is null)
+                throw new ArgumentNullException(nameof(registry));
+            if (lifecycleOwner is null)
+                throw new ArgumentNullException(nameof(lifecycleOwner));
+            if (callback is null)
+                throw new ArgumentNullException(nameof(callback));
+
+            var rawCallback = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, MarshalOutput);
+            var launcher = registry.Register(key, lifecycleOwner, rawContract, rawCallback);
+            return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, MarshalInput);
+        }
     }
-}
 
-public sealed class ActivityResultContract<TInput, TResult>
-{
-    readonly Func<TInput?, Java.Lang.Object?> inputMarshaler;
-    readonly Func<Java.Lang.Object?, TResult?> outputMarshaler;
-
-    public ActivityResultContract(ActivityResultContract rawContract)
-        : this(rawContract, ActivityResultFacadeMarshal.ToJavaObject, ActivityResultFacadeMarshal.FromJavaObject<TResult>)
+    public partial class ActivityResultContracts
     {
+        public static class Typed
+        {
+            public static ActivityResultContract<Android.Net.Uri, Java.Lang.Boolean> CaptureVideo()
+                => new(new ActivityResultContracts.CaptureVideo());
+
+            public static ActivityResultContract<Java.Lang.String, Android.Net.Uri> CreateDocument()
+                => new(new ActivityResultContracts.CreateDocument());
+
+            public static ActivityResultContract<Java.Lang.String, Android.Net.Uri> GetContent()
+                => new(new ActivityResultContracts.GetContent());
+
+            public static ActivityResultContract<Java.Lang.String, Java.Util.IList> GetMultipleContents()
+                => new(new ActivityResultContracts.GetMultipleContents());
+
+            public static ActivityResultContract<JavaArray<Java.Lang.String>, Android.Net.Uri> OpenDocument()
+                => new(new ActivityResultContracts.OpenDocument());
+
+            public static ActivityResultContract<Android.Net.Uri, Android.Net.Uri> OpenDocumentTree()
+                => new(new ActivityResultContracts.OpenDocumentTree());
+
+            public static ActivityResultContract<JavaArray<Java.Lang.String>, Java.Util.IList> OpenMultipleDocuments()
+                => new(new ActivityResultContracts.OpenMultipleDocuments());
+
+            public static ActivityResultContract<Java.Lang.Void, Android.Net.Uri> PickContact()
+                => new(new ActivityResultContracts.PickContact());
+
+            public static ActivityResultContract<global::AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
+                => new(new ActivityResultContracts.PickMultipleVisualMedia());
+
+            public static ActivityResultContract<global::AndroidX.Activity.Result.PickVisualMediaRequest, Android.Net.Uri> PickVisualMedia()
+                => new(new ActivityResultContracts.PickVisualMedia());
+
+            public static ActivityResultContract<JavaArray<Java.Lang.String>, Java.Util.IMap> RequestMultiplePermissions()
+                => new(new ActivityResultContracts.RequestMultiplePermissions());
+
+            public static ActivityResultContract<Java.Lang.String, Java.Lang.Boolean> RequestPermission()
+                => new(new ActivityResultContracts.RequestPermission());
+
+            public static ActivityResultContract<Intent, global::AndroidX.Activity.Result.ActivityResult> StartActivityForResult()
+                => new(new ActivityResultContracts.StartActivityForResult());
+
+            public static ActivityResultContract<global::AndroidX.Activity.Result.IntentSenderRequest, global::AndroidX.Activity.Result.ActivityResult> StartIntentSenderForResult()
+                => new(new ActivityResultContracts.StartIntentSenderForResult());
+
+            public static ActivityResultContract<Android.Net.Uri, Java.Lang.Boolean> TakePicture()
+                => new(new ActivityResultContracts.TakePicture());
+
+            public static ActivityResultContract<Java.Lang.Void, Android.Graphics.Bitmap> TakePicturePreview()
+                => new(new ActivityResultContracts.TakePicturePreview());
+
+            public static ActivityResultContract<Android.Net.Uri, Android.Graphics.Bitmap> TakeVideo()
+                => new(new ActivityResultContracts.TakeVideo());
+        }
     }
-
-    public ActivityResultContract(
-        ActivityResultContract rawContract,
-        Func<TInput?, Java.Lang.Object?> inputMarshaler,
-        Func<Java.Lang.Object?, TResult?> outputMarshaler)
-    {
-        RawContract = rawContract ?? throw new ArgumentNullException(nameof(rawContract));
-        this.inputMarshaler = inputMarshaler ?? throw new ArgumentNullException(nameof(inputMarshaler));
-        this.outputMarshaler = outputMarshaler ?? throw new ArgumentNullException(nameof(outputMarshaler));
-    }
-
-    public ActivityResultContract RawContract { get; }
-
-    internal Java.Lang.Object? MarshalInput(TInput? input)
-        => inputMarshaler(input);
-
-    internal TResult? MarshalOutput(Java.Lang.Object? output)
-        => outputMarshaler(output);
-
-    public Intent CreateIntent(Context context, TInput? input)
-        => RawContract.CreateIntent(context, inputMarshaler(input));
-
-    public TResult? ParseResult(int resultCode, Intent? intent)
-        => outputMarshaler(RawContract.ParseResult(resultCode, intent));
-
-    public ActivityResultContract.SynchronousResult<TResult>? GetSynchronousResult(Context context, TInput? input)
-        => ActivityResultContract.SynchronousResult<TResult>.FromRaw(RawContract.GetSynchronousResult(context, inputMarshaler(input)));
-}
-
-public static class ActivityResultContractTypedExtensions
-{
-    public static ActivityResultContract<TInput, TResult> AsTyped<TInput, TResult>(this ActivityResultContract contract)
-        => new ActivityResultContract<TInput, TResult>(contract);
-}
-}
-
-namespace AndroidX.Activity.Result
-{
-
-public interface IActivityResultCallback<TResult>
-{
-    void OnActivityResult(TResult? result);
-}
-
-sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object, global::AndroidX.Activity.Result.IActivityResultCallback
-{
-    readonly Func<Java.Lang.Object?, TResult?> outputMarshaler;
-    readonly Action<TResult?> callback;
-
-    public ActivityResultCallbackAdapter(Action<TResult?> callback, Func<Java.Lang.Object?, TResult?> outputMarshaler)
-    {
-        this.callback = callback ?? throw new ArgumentNullException(nameof(callback));
-        this.outputMarshaler = outputMarshaler ?? throw new ArgumentNullException(nameof(outputMarshaler));
-    }
-
-    public void OnActivityResult(Java.Lang.Object? result)
-        => callback(outputMarshaler(result));
-}
-
-public sealed class ActivityResultCallback<TResult> : Java.Lang.Object, global::AndroidX.Activity.Result.IActivityResultCallback, IActivityResultCallback<TResult>
-{
-    readonly Action<TResult?> callback;
-
-    public ActivityResultCallback(Action<TResult?> callback)
-    {
-        this.callback = callback ?? throw new ArgumentNullException(nameof(callback));
-    }
-
-    public void OnActivityResult(TResult? result)
-        => callback(result);
-
-    void global::AndroidX.Activity.Result.IActivityResultCallback.OnActivityResult(Java.Lang.Object? result)
-        => callback(ActivityResultFacadeMarshal.FromJavaObject<TResult>(result));
-}
-
-public sealed class ActivityResultLauncher<TInput>
-{
-    readonly Func<TInput?, Java.Lang.Object?> inputMarshaler;
-
-    internal ActivityResultLauncher(global::AndroidX.Activity.Result.ActivityResultLauncher rawLauncher, Func<TInput?, Java.Lang.Object?> inputMarshaler)
-    {
-        RawLauncher = rawLauncher ?? throw new ArgumentNullException(nameof(rawLauncher));
-        this.inputMarshaler = inputMarshaler ?? throw new ArgumentNullException(nameof(inputMarshaler));
-    }
-
-    public global::AndroidX.Activity.Result.ActivityResultLauncher RawLauncher { get; }
-
-    public global::AndroidX.Activity.Result.Contract.ActivityResultContract RawContract
-        => RawLauncher.RawContract;
-
-    public void Launch(TInput? input)
-        => RawLauncher.Launch(inputMarshaler(input));
-
-    public void Launch(TInput? input, ActivityOptionsCompat? options)
-        => RawLauncher.Launch(inputMarshaler(input), options);
-
-    public void Unregister()
-        => RawLauncher.Unregister();
-}
-
-public static class TypedActivityResultExtensions
-{
-    public static ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
-        this IActivityResultCaller caller,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        IActivityResultCallback<TResult> callback)
-    {
-        if (caller is null)
-            throw new ArgumentNullException(nameof(caller));
-        if (contract is null)
-            throw new ArgumentNullException(nameof(contract));
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        var rawCallback = new ActivityResultCallbackAdapter<TResult>(callback.OnActivityResult, contract.MarshalOutput);
-        var launcher = caller.RegisterForActivityResult(contract.RawContract, rawCallback);
-        return new ActivityResultLauncher<TInput>(launcher, contract.MarshalInput);
-    }
-
-    public static ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
-        this IActivityResultCaller caller,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        Action<TResult?> callback)
-    {
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        return RegisterForActivityResult(caller, contract, new ActivityResultCallback<TResult>(callback));
-    }
-
-    public static ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
-        this IActivityResultCaller caller,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        ActivityResultRegistry registry,
-        IActivityResultCallback<TResult> callback)
-    {
-        if (caller is null)
-            throw new ArgumentNullException(nameof(caller));
-        if (contract is null)
-            throw new ArgumentNullException(nameof(contract));
-        if (registry is null)
-            throw new ArgumentNullException(nameof(registry));
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        var rawCallback = new ActivityResultCallbackAdapter<TResult>(callback.OnActivityResult, contract.MarshalOutput);
-        var launcher = caller.RegisterForActivityResult(contract.RawContract, registry, rawCallback);
-        return new ActivityResultLauncher<TInput>(launcher, contract.MarshalInput);
-    }
-
-    public static ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
-        this IActivityResultCaller caller,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        ActivityResultRegistry registry,
-        Action<TResult?> callback)
-    {
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        return RegisterForActivityResult(caller, contract, registry, new ActivityResultCallback<TResult>(callback));
-    }
-
-    public static ActivityResultLauncher<TInput> Register<TInput, TResult>(
-        this ActivityResultRegistry registry,
-        string key,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        IActivityResultCallback<TResult> callback)
-    {
-        if (registry is null)
-            throw new ArgumentNullException(nameof(registry));
-        if (contract is null)
-            throw new ArgumentNullException(nameof(contract));
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        var rawCallback = new ActivityResultCallbackAdapter<TResult>(callback.OnActivityResult, contract.MarshalOutput);
-        var launcher = registry.Register(key, contract.RawContract, rawCallback);
-        return new ActivityResultLauncher<TInput>(launcher, contract.MarshalInput);
-    }
-
-    public static ActivityResultLauncher<TInput> Register<TInput, TResult>(
-        this ActivityResultRegistry registry,
-        string key,
-        global::AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner,
-        global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-        IActivityResultCallback<TResult> callback)
-    {
-        if (registry is null)
-            throw new ArgumentNullException(nameof(registry));
-        if (lifecycleOwner is null)
-            throw new ArgumentNullException(nameof(lifecycleOwner));
-        if (contract is null)
-            throw new ArgumentNullException(nameof(contract));
-        if (callback is null)
-            throw new ArgumentNullException(nameof(callback));
-
-        var rawCallback = new ActivityResultCallbackAdapter<TResult>(callback.OnActivityResult, contract.MarshalOutput);
-        var launcher = registry.Register(key, lifecycleOwner, contract.RawContract, rawCallback);
-        return new ActivityResultLauncher<TInput>(launcher, contract.MarshalInput);
-    }
-
-    public static ActivityResultLauncher<TInput> AsTyped<TInput>(
-        this global::AndroidX.Activity.Result.ActivityResultLauncher launcher,
-        Func<TInput?, Java.Lang.Object?>? inputMarshaler = null)
-    {
-        if (launcher is null)
-            throw new ArgumentNullException(nameof(launcher));
-
-        return new ActivityResultLauncher<TInput>(launcher, inputMarshaler ?? ActivityResultFacadeMarshal.ToJavaObject);
-    }
-}
 }
