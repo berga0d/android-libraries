@@ -29,7 +29,7 @@ internal static class ActivityResultFacadeMarshal
             float floatValue => Java.Lang.Float.ValueOf(floatValue),
             double doubleValue => Java.Lang.Double.ValueOf(doubleValue),
             string[] stringArrayValue => Java.Lang.Object.GetObject<Java.Lang.Object>(JNIEnv.NewArray(stringArrayValue), JniHandleOwnership.TransferLocalRef),
-            _ => throw new InvalidCastException($"Cannot marshal type '{boxed.GetType().FullName}' to Java.Lang.Object."),
+            _ => throw new InvalidCastException($"Cannot marshal type '{boxed.GetType().FullName}' to Java.Lang.Object. Supported types: string, bool, int, long, float, double, string[], and Java.Lang.Object-derived types."),
         };
     }
 
@@ -45,7 +45,7 @@ internal static class ActivityResultFacadeMarshal
         if (converted is T convertedTyped)
             return convertedTyped;
 
-        throw new InvalidCastException($"Cannot convert Java value '{value.GetType().FullName}' to '{typeof(T).FullName}'.");
+        throw new InvalidCastException($"Cannot convert Java value '{value.GetType().FullName}' to '{typeof(T).FullName}'. Supported conversions include Java.Lang.String->string, Java.Lang.Boolean->bool, Java.Lang.Integer->int, Java.Lang.Long->long, Java.Lang.Float->float, Java.Lang.Double->double, Java.Util.Map->IDictionary<string,bool>, and Java.Util.List->IList<Android.Net.Uri>.");
     }
 
     static object? TryConvertFromJavaObject(Type targetType, Java.Lang.Object value)
