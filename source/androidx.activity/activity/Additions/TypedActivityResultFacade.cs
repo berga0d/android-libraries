@@ -116,7 +116,6 @@ public static class ActivityResultCallerTypedExtensions
 }
 
 }
-
 namespace AndroidX.Activity.Result.Contract
 {
 
@@ -127,7 +126,6 @@ public sealed class ActivityResultContract<TInput, TResult>
     public ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
 }
-
 public partial class ActivityResultContracts
 {
     public static class Typed
