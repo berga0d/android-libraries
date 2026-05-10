@@ -66,7 +66,7 @@ public sealed class ActivityResultCallerLauncher<TInput>
     {
         if (typeof(TInput) == typeof(Java.Lang.Void))
         {
-            launcher.Native.Launch(null, options);
+            launcher.Native.Launch((Java.Lang.Void?)null, options);
             return;
         }
 
@@ -88,7 +88,7 @@ public sealed class ActivityResultCallerLauncher<TInput>
             return;
         }
 
-        throw new InvalidCastException($"Cannot marshal '{typeof(TInput).FullName}' to Java.Lang.Object.");
+        throw new InvalidCastException($"Unsupported input type for activity result launch: '{typeof(TInput).FullName}'.");
     }
 
     public void Unregister()
