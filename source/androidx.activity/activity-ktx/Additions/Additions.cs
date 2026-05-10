@@ -21,31 +21,16 @@ namespace AndroidX.Activity.Result
 
         public void Launch(ActivityOptionsCompat? options)
         {
-            if (typeof(TInput) == typeof(Java.Lang.Void))
+            Java.Lang.Object? javaInput = input switch
             {
-                launcher.Native.Launch((Java.Lang.Void?)null, options);
-                return;
-            }
+                null => null,
+                Java.Lang.Object value => value,
+                string value => value,
+                string[] value => value,
+                _ => throw new InvalidCastException($"Unsupported input type for activity result launch: '{typeof(TInput).FullName}'.")
+            };
 
-            if (input is Java.Lang.Object javaInput)
-            {
-                launcher.Native.Launch(javaInput, options);
-                return;
-            }
-
-            if (input is string stringInput)
-            {
-                launcher.Native.Launch(stringInput, options);
-                return;
-            }
-
-            if (input is string[] stringArrayInput)
-            {
-                launcher.Native.Launch(stringArrayInput, options);
-                return;
-            }
-
-            throw new InvalidCastException($"Unsupported input type for activity result launch: '{typeof(TInput).FullName}'.");
+            launcher.Native.Launch(javaInput, options);
         }
 
         public void Unregister()
