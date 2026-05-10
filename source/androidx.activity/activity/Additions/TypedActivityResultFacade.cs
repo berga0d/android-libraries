@@ -4,7 +4,6 @@ using System;
 using Android.Content;
 using AndroidX.Core.App;
 using Java.Interop;
-using RawActivityResultContract = AndroidX.Activity.Result.Contract.ActivityResultContract;
 
 namespace AndroidX.Activity.Result
 {
@@ -31,9 +30,9 @@ internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object,
 
 public sealed class ActivityResultLauncher<TInput>
 {
-    internal global::AndroidX.Activity.Result.ActivityResultLauncher Native { get; }
+    internal AndroidX.Activity.Result.ActivityResultLauncher Native { get; }
 
-    internal ActivityResultLauncher(global::AndroidX.Activity.Result.ActivityResultLauncher native)
+    internal ActivityResultLauncher(AndroidX.Activity.Result.ActivityResultLauncher native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
 
     public void Unregister()
@@ -74,17 +73,17 @@ namespace AndroidX.Activity.Result.Contract
 
 public sealed class ActivityResultContract<TInput, TResult>
 {
-    readonly RawActivityResultContract native;
+    readonly AndroidX.Activity.Result.Contract.ActivityResultContract native;
     readonly Func<TInput?, Java.Lang.Object?> inputConverter;
     readonly Func<Java.Lang.Object?, TResult?> outputConverter;
 
-    public ActivityResultContract(RawActivityResultContract native)
+    public ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
         : this(native, DefaultInputConverter, DefaultOutputConverter)
     {
     }
 
     internal ActivityResultContract(
-        RawActivityResultContract native,
+        AndroidX.Activity.Result.Contract.ActivityResultContract native,
         Func<TInput?, Java.Lang.Object?> inputConverter,
         Func<Java.Lang.Object?, TResult?> outputConverter)
     {
@@ -99,22 +98,22 @@ public sealed class ActivityResultContract<TInput, TResult>
     public TResult? ParseResult(int resultCode, Intent? intent)
         => outputConverter(native.ParseResult(resultCode, intent));
 
-    public RawActivityResultContract.SynchronousResult? GetSynchronousResult(Context context, TInput? input)
+    public AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult? GetSynchronousResult(Context context, TInput? input)
         => native.GetSynchronousResult(context, inputConverter(input));
 
-    public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(global::AndroidX.Activity.Result.IActivityResultCaller caller, Action<TResult?> callback)
+    public AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller caller, Action<TResult?> callback)
     {
         if (caller is null)
             throw new ArgumentNullException(nameof(caller));
         if (callback is null)
             throw new ArgumentNullException(nameof(callback));
 
-        var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
+        var callbackAdapter = new AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = caller.RegisterForActivityResult(native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
+        return new AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
-    public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(global::AndroidX.Activity.Result.IActivityResultCaller caller, global::AndroidX.Activity.Result.ActivityResultRegistry registry, Action<TResult?> callback)
+    public AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller caller, AndroidX.Activity.Result.ActivityResultRegistry registry, Action<TResult?> callback)
     {
         if (caller is null)
             throw new ArgumentNullException(nameof(caller));
@@ -123,24 +122,24 @@ public sealed class ActivityResultContract<TInput, TResult>
         if (callback is null)
             throw new ArgumentNullException(nameof(callback));
 
-        var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
+        var callbackAdapter = new AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = caller.RegisterForActivityResult(native, registry, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
+        return new AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
-    public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, Action<TResult?> callback)
+    public AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(AndroidX.Activity.Result.ActivityResultRegistry registry, string key, Action<TResult?> callback)
     {
         if (registry is null)
             throw new ArgumentNullException(nameof(registry));
         if (callback is null)
             throw new ArgumentNullException(nameof(callback));
 
-        var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
+        var callbackAdapter = new AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = registry.Register(key, native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
+        return new AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
-    public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, global::AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner, Action<TResult?> callback)
+    public AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(AndroidX.Activity.Result.ActivityResultRegistry registry, string key, AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner, Action<TResult?> callback)
     {
         if (registry is null)
             throw new ArgumentNullException(nameof(registry));
@@ -149,9 +148,9 @@ public sealed class ActivityResultContract<TInput, TResult>
         if (callback is null)
             throw new ArgumentNullException(nameof(callback));
 
-        var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
+        var callbackAdapter = new AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = registry.Register(key, lifecycleOwner, native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
+        return new AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
     static Java.Lang.Object? DefaultInputConverter(TInput? input)
@@ -196,13 +195,13 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<string[], Java.Util.IList> OpenMultipleDocuments()
             => new(new ActivityResultContracts.OpenMultipleDocuments(), StringArrayInputConverter, ListOutputConverter);
 
-        public static ActivityResultContract<global::AndroidX.Activity.Result.ActivityResultUnit, Android.Net.Uri> PickContact()
+        public static ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Net.Uri> PickContact()
             => new(new ActivityResultContracts.PickContact(), UnitInputConverter, UriOutputConverter);
 
-        public static ActivityResultContract<global::AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
+        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
             => new(new ActivityResultContracts.PickMultipleVisualMedia());
 
-        public static ActivityResultContract<global::AndroidX.Activity.Result.PickVisualMediaRequest, Android.Net.Uri> PickVisualMedia()
+        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Android.Net.Uri> PickVisualMedia()
             => new(new ActivityResultContracts.PickVisualMedia());
 
         public static ActivityResultContract<string[], Java.Util.IMap> RequestMultiplePermissions()
@@ -211,16 +210,16 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<string, bool> RequestPermission()
             => new(new ActivityResultContracts.RequestPermission(), StringInputConverter, BooleanOutputConverter);
 
-        public static ActivityResultContract<Intent, global::AndroidX.Activity.Result.ActivityResult> StartActivityForResult()
+        public static ActivityResultContract<Intent, AndroidX.Activity.Result.ActivityResult> StartActivityForResult()
             => new(new ActivityResultContracts.StartActivityForResult(), IntentInputConverter, ActivityResultOutputConverter);
 
-        public static ActivityResultContract<global::AndroidX.Activity.Result.IntentSenderRequest, global::AndroidX.Activity.Result.ActivityResult> StartIntentSenderForResult()
+        public static ActivityResultContract<AndroidX.Activity.Result.IntentSenderRequest, AndroidX.Activity.Result.ActivityResult> StartIntentSenderForResult()
             => new(new ActivityResultContracts.StartIntentSenderForResult(), IntentSenderRequestInputConverter, ActivityResultOutputConverter);
 
         public static ActivityResultContract<Android.Net.Uri, bool> TakePicture()
             => new(new ActivityResultContracts.TakePicture(), UriInputConverter, BooleanOutputConverter);
 
-        public static ActivityResultContract<global::AndroidX.Activity.Result.ActivityResultUnit, Android.Graphics.Bitmap> TakePicturePreview()
+        public static ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Graphics.Bitmap> TakePicturePreview()
             => new(new ActivityResultContracts.TakePicturePreview(), UnitInputConverter, BitmapOutputConverter);
 
         public static ActivityResultContract<Android.Net.Uri, Android.Graphics.Bitmap> TakeVideo()
@@ -232,7 +231,7 @@ public partial class ActivityResultContracts
         static Java.Lang.Object? IntentInputConverter(Intent? input)
             => input;
 
-        static Java.Lang.Object? IntentSenderRequestInputConverter(global::AndroidX.Activity.Result.IntentSenderRequest? input)
+        static Java.Lang.Object? IntentSenderRequestInputConverter(AndroidX.Activity.Result.IntentSenderRequest? input)
             => input;
 
         static Java.Lang.Object? StringInputConverter(string? input)
@@ -241,7 +240,7 @@ public partial class ActivityResultContracts
         static Java.Lang.Object? StringArrayInputConverter(string[]? input)
             => input is null ? null : new JavaArray<string>(input);
 
-        static Java.Lang.Object? UnitInputConverter(global::AndroidX.Activity.Result.ActivityResultUnit unit)
+        static Java.Lang.Object? UnitInputConverter(AndroidX.Activity.Result.ActivityResultUnit unit)
             => null;
 
         static Android.Net.Uri? UriOutputConverter(Java.Lang.Object? output)
@@ -268,12 +267,12 @@ public partial class ActivityResultContracts
                 _ => throw new InvalidCastException($"Cannot cast '{output.GetType().FullName}' to '{typeof(Java.Util.IMap).FullName}'."),
             };
 
-        static global::AndroidX.Activity.Result.ActivityResult? ActivityResultOutputConverter(Java.Lang.Object? output)
+        static AndroidX.Activity.Result.ActivityResult? ActivityResultOutputConverter(Java.Lang.Object? output)
             => output switch
             {
                 null => null,
-                global::AndroidX.Activity.Result.ActivityResult activityResult => activityResult,
-                _ => throw new InvalidCastException($"Cannot cast '{output.GetType().FullName}' to '{typeof(global::AndroidX.Activity.Result.ActivityResult).FullName}'."),
+                AndroidX.Activity.Result.ActivityResult activityResult => activityResult,
+                _ => throw new InvalidCastException($"Cannot cast '{output.GetType().FullName}' to '{typeof(AndroidX.Activity.Result.ActivityResult).FullName}'."),
             };
 
         static Android.Graphics.Bitmap? BitmapOutputConverter(Java.Lang.Object? output)
