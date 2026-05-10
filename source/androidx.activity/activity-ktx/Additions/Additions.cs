@@ -6,18 +6,20 @@ namespace AndroidX.Activity.Result
 {
     public static class ActivityResultCallerKtxTypedExtensions
     {
-        public static global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
+        public static ActivityResultCallerLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
             this IActivityResultCaller caller,
-            global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
+            AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
+            TInput input,
             Action<TResult?> callback)
-            => contract.RegisterForActivityResult(caller, callback);
+            => new(AndroidX.Activity.Result.ActivityResultCallerTypedExtensions.RegisterForActivityResult(caller, contract, callback), input);
 
-        public static global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
+        public static ActivityResultCallerLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
             this IActivityResultCaller caller,
-            global::AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
+            AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
             ActivityResultRegistry registry,
+            TInput input,
             Action<TResult?> callback)
-            => contract.RegisterForActivityResult(caller, registry, callback);
+            => new(AndroidX.Activity.Result.ActivityResultCallerTypedExtensions.RegisterForActivityResult(caller, contract, registry, callback), input);
     }
 }
 

@@ -118,6 +118,11 @@ AndroidX.Activity.Result.ActivityResult.DescribeContents() -> int
 AndroidX.Activity.Result.ActivityResult.ResultCode.get -> int
 AndroidX.Activity.Result.ActivityResult.WriteToParcel(Android.OS.Parcel! dest, Android.OS.ParcelableWriteFlags flags) -> void
 AndroidX.Activity.Result.ActivityResultCallerKt
+AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>
+AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch() -> void
+AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch(AndroidX.Core.App.ActivityOptionsCompat? options) -> void
+AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Unregister() -> void
+AndroidX.Activity.Result.ActivityResultCallerTypedExtensions
 AndroidX.Activity.Result.ActivityResultKt
 AndroidX.Activity.Result.ActivityResultUnit
 AndroidX.Activity.Result.ActivityResultUnit.Value.get -> AndroidX.Activity.Result.ActivityResultUnit
@@ -145,12 +150,6 @@ AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.SynchronousResult(Java.Lang.Object? value) -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.Value.get -> Java.Lang.Object?
 AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract! rawContract) -> void
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.CreateIntent(Android.Content.Context! context, TInput? input) -> Android.Content.Intent!
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.ParseResult(int resultCode, Android.Content.Intent? intent) -> TResult?
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.Register(AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.Register(AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Lifecycle.ILifecycleOwner! lifecycleOwner, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.ActivityResultRegistry! registry, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput,TResult>.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! caller, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
 AndroidX.Activity.Result.Contract.ActivityResultContracts
 AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo
@@ -474,6 +473,8 @@ static AndroidX.Activity.Result.ActivityResult.Creator.get -> Android.OS.IParcel
 static AndroidX.Activity.Result.ActivityResult.ResultCodeToString(int resultCode) -> string!
 static AndroidX.Activity.Result.ActivityResultCallerKt.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! obj, AndroidX.Activity.Result.Contract.ActivityResultContract! contract, Java.Lang.Object? input, AndroidX.Activity.Result.ActivityResultRegistry! registry, Kotlin.Jvm.Functions.IFunction1! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
 static AndroidX.Activity.Result.ActivityResultCallerKt.RegisterForActivityResult(AndroidX.Activity.Result.IActivityResultCaller! obj, AndroidX.Activity.Result.Contract.ActivityResultContract! contract, Java.Lang.Object? input, Kotlin.Jvm.Functions.IFunction1! callback) -> AndroidX.Activity.Result.ActivityResultLauncher!
+static AndroidX.Activity.Result.ActivityResultCallerTypedExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
+static AndroidX.Activity.Result.ActivityResultCallerTypedExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.CaptureVideo() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, bool>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.CreateDocument() -> AndroidX.Activity.Result.Contract.ActivityResultContract<string!, Android.Net.Uri!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.GetContent() -> AndroidX.Activity.Result.Contract.ActivityResultContract<string!, Android.Net.Uri!>!
