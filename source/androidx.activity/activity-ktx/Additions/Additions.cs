@@ -49,8 +49,8 @@ namespace AndroidX.Activity.Result
         public static ActivityResultCallerLauncher<TInput> RegisterForActivityResult<TInput, TResult>(
             this IActivityResultCaller caller,
             AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult> contract,
-            ActivityResultRegistry registry,
             TInput input,
+            ActivityResultRegistry registry,
             Action<TResult?> callback)
             => new(AndroidX.Activity.Result.ActivityResultCallerTypedExtensions.RegisterForActivityResult(caller, contract, registry, callback), input);
     }

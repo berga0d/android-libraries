@@ -114,6 +114,52 @@ public static class ActivityResultCallerTypedExtensions
     }
 }
 
+public static class ActivityResultRegistryTypedExtensions
+{
+    public static ActivityResultLauncher<TInput> Register<TInput, TResult>(
+        this ActivityResultRegistry registry,
+        string key,
+        Contract.ActivityResultContract<TInput, TResult> contract,
+        Action<TResult?> callback)
+    {
+        if (registry is null)
+            throw new ArgumentNullException(nameof(registry));
+        if (key is null)
+            throw new ArgumentNullException(nameof(key));
+        if (contract is null)
+            throw new ArgumentNullException(nameof(contract));
+        if (callback is null)
+            throw new ArgumentNullException(nameof(callback));
+
+        var callbackAdapter = new ActivityResultCallbackAdapter<TResult>(callback);
+        var launcher = registry.Register(key, contract.Native, callbackAdapter);
+        return new ActivityResultLauncher<TInput>(launcher);
+    }
+
+    public static ActivityResultLauncher<TInput> Register<TInput, TResult>(
+        this ActivityResultRegistry registry,
+        string key,
+        AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner,
+        Contract.ActivityResultContract<TInput, TResult> contract,
+        Action<TResult?> callback)
+    {
+        if (registry is null)
+            throw new ArgumentNullException(nameof(registry));
+        if (key is null)
+            throw new ArgumentNullException(nameof(key));
+        if (lifecycleOwner is null)
+            throw new ArgumentNullException(nameof(lifecycleOwner));
+        if (contract is null)
+            throw new ArgumentNullException(nameof(contract));
+        if (callback is null)
+            throw new ArgumentNullException(nameof(callback));
+
+        var callbackAdapter = new ActivityResultCallbackAdapter<TResult>(callback);
+        var launcher = registry.Register(key, lifecycleOwner, contract.Native, callbackAdapter);
+        return new ActivityResultLauncher<TInput>(launcher);
+    }
+}
+
 }
 namespace AndroidX.Activity.Result.Contract
 {
@@ -132,8 +178,12 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<Android.Net.Uri, bool> CaptureVideo()
             => new(new ActivityResultContracts.CaptureVideo());
 
+        [Obsolete]
         public static ActivityResultContract<string, Android.Net.Uri> CreateDocument()
             => new(new ActivityResultContracts.CreateDocument());
+
+        public static ActivityResultContract<string, Android.Net.Uri> CreateDocument(string mimeType)
+            => new(new ActivityResultContracts.CreateDocument(mimeType));
 
         public static ActivityResultContract<string, Android.Net.Uri> GetContent()
             => new(new ActivityResultContracts.GetContent());
@@ -144,7 +194,7 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<string[], Android.Net.Uri> OpenDocument()
             => new(new ActivityResultContracts.OpenDocument());
 
-        public static ActivityResultContract<Android.Net.Uri, Android.Net.Uri> OpenDocumentTree()
+        public static ActivityResultContract<Android.Net.Uri?, Android.Net.Uri> OpenDocumentTree()
             => new(new ActivityResultContracts.OpenDocumentTree());
 
         public static ActivityResultContract<string[], Java.Util.IList> OpenMultipleDocuments()
@@ -155,6 +205,9 @@ public partial class ActivityResultContracts
 
         public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
             => new(new ActivityResultContracts.PickMultipleVisualMedia());
+
+        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia(int maxItems)
+            => new(new ActivityResultContracts.PickMultipleVisualMedia(maxItems));
 
         public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Android.Net.Uri> PickVisualMedia()
             => new(new ActivityResultContracts.PickVisualMedia());
@@ -177,6 +230,7 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<Java.Lang.Void, Android.Graphics.Bitmap> TakePicturePreview()
             => new(new ActivityResultContracts.TakePicturePreview());
 
+        [Obsolete]
         public static ActivityResultContract<Android.Net.Uri, Android.Graphics.Bitmap> TakeVideo()
             => new(new ActivityResultContracts.TakeVideo());
     }
