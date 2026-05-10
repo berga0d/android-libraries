@@ -118,10 +118,6 @@ AndroidX.Activity.Result.ActivityResult.DescribeContents() -> int
 AndroidX.Activity.Result.ActivityResult.ResultCode.get -> int
 AndroidX.Activity.Result.ActivityResult.WriteToParcel(Android.OS.Parcel! dest, Android.OS.ParcelableWriteFlags flags) -> void
 AndroidX.Activity.Result.ActivityResultCallerKt
-AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>
-AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch() -> void
-AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch(AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Unregister() -> void
 AndroidX.Activity.Result.ActivityResultCallerTypedExtensions
 AndroidX.Activity.Result.ActivityResultKt
 AndroidX.Activity.Result.ActivityResultLauncher
