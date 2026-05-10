@@ -54,20 +54,19 @@ public static class ActivityResultLauncherTypedExtensions
         this ActivityResultLauncher<TInput> launcher,
         TInput input,
         ActivityOptionsCompat? options = null)
-        where TInput : Java.Lang.Object
-        => launcher.Native.Launch(input, options);
+    {
+        Java.Lang.Object? javaInput = input switch
+        {
+            null => null,
+            Java.Lang.Object value => value,
+            string value => value,
+            string[] value => value,
+            _ => throw new InvalidOperationException(
+                $"Unsupported activity result input type '{typeof(TInput)}'.")
+        };
 
-    public static void Launch(
-        this ActivityResultLauncher<string> launcher,
-        string input,
-        ActivityOptionsCompat? options = null)
-        => launcher.Native.Launch(input, options);
-
-    public static void Launch(
-        this ActivityResultLauncher<string[]> launcher,
-        string[] input,
-        ActivityOptionsCompat? options = null)
-        => launcher.Native.Launch(input, options);
+        launcher.Native.Launch(javaInput, options);
+    }
 
     public static void Launch(
         this ActivityResultLauncher<Java.Lang.Void> launcher,

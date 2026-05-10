@@ -491,8 +491,6 @@ static AndroidX.Activity.Result.ActivityResultKt.Component2(AndroidX.Activity.Re
 static AndroidX.Activity.Result.ActivityResultLauncherKt.Launch(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherKt.LaunchUnit(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<Java.Lang.Void!>! launcher, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<string!>! launcher, string! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<string![]!>! launcher, string![]! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch<TInput>(this AndroidX.Activity.Result.ActivityResultLauncher<TInput!>! launcher, TInput! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.PhotosTab.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.PhotosTab!
