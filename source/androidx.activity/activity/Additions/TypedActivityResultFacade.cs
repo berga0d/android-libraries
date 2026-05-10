@@ -7,12 +7,6 @@ using AndroidX.Core.App;
 
 namespace AndroidX.Activity.Result
 {
-
-public readonly struct ActivityResultUnit
-{
-    public static ActivityResultUnit Value => default;
-}
-
 internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object, IActivityResultCallback
 {
     readonly Action<TResult?> callback;
@@ -70,7 +64,7 @@ public sealed class ActivityResultCallerLauncher<TInput>
 
     public void Launch(ActivityOptionsCompat? options)
     {
-        if (typeof(TInput) == typeof(ActivityResultUnit))
+        if (typeof(TInput) == typeof(Java.Lang.Void))
         {
             launcher.Native.Launch(null, options);
             return;
@@ -123,7 +117,7 @@ public static class ActivityResultLauncherTypedExtensions
         => launcher.Native.Launch(input, options);
 
     public static void Launch(
-        this ActivityResultLauncher<ActivityResultUnit> launcher,
+        this ActivityResultLauncher<Java.Lang.Void> launcher,
         ActivityOptionsCompat? options = null)
         => launcher.Native.Launch(null, options);
 }
@@ -206,7 +200,7 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<string[], Java.Util.IList> OpenMultipleDocuments()
             => new(new ActivityResultContracts.OpenMultipleDocuments());
 
-        public static ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Net.Uri> PickContact()
+        public static ActivityResultContract<Java.Lang.Void, Android.Net.Uri> PickContact()
             => new(new ActivityResultContracts.PickContact());
 
         public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
@@ -230,7 +224,7 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<Android.Net.Uri, bool> TakePicture()
             => new(new ActivityResultContracts.TakePicture());
 
-        public static ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Graphics.Bitmap> TakePicturePreview()
+        public static ActivityResultContract<Java.Lang.Void, Android.Graphics.Bitmap> TakePicturePreview()
             => new(new ActivityResultContracts.TakePicturePreview());
 
         public static ActivityResultContract<Android.Net.Uri, Android.Graphics.Bitmap> TakeVideo()

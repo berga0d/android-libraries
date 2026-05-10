@@ -124,8 +124,6 @@ AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch(AndroidX.Co
 AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Unregister() -> void
 AndroidX.Activity.Result.ActivityResultCallerTypedExtensions
 AndroidX.Activity.Result.ActivityResultKt
-AndroidX.Activity.Result.ActivityResultUnit
-AndroidX.Activity.Result.ActivityResultUnit.Value.get -> AndroidX.Activity.Result.ActivityResultUnit
 AndroidX.Activity.Result.ActivityResultLauncher
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Unregister() -> void
@@ -482,7 +480,7 @@ static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.GetMultip
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenDocument() -> AndroidX.Activity.Result.Contract.ActivityResultContract<string[]!, Android.Net.Uri!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenDocumentTree() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Android.Net.Uri!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.OpenMultipleDocuments() -> AndroidX.Activity.Result.Contract.ActivityResultContract<string[]!, Java.Util.IList!>!
-static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickContact() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Net.Uri!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickContact() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.Void!, Android.Net.Uri!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickMultipleVisualMedia() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest!, Java.Util.IList!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.PickVisualMedia() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest!, Android.Net.Uri!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.RequestMultiplePermissions() -> AndroidX.Activity.Result.Contract.ActivityResultContract<string[]!, Java.Util.IMap!>!
@@ -490,13 +488,13 @@ static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.RequestPe
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.StartActivityForResult() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Content.Intent!, AndroidX.Activity.Result.ActivityResult!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.StartIntentSenderForResult() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.IntentSenderRequest!, AndroidX.Activity.Result.ActivityResult!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakePicture() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, bool>!
-static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakePicturePreview() -> AndroidX.Activity.Result.Contract.ActivityResultContract<AndroidX.Activity.Result.ActivityResultUnit, Android.Graphics.Bitmap!>!
+static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakePicturePreview() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Java.Lang.Void!, Android.Graphics.Bitmap!>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.Typed.TakeVideo() -> AndroidX.Activity.Result.Contract.ActivityResultContract<Android.Net.Uri!, Android.Graphics.Bitmap!>!
 static AndroidX.Activity.Result.ActivityResultKt.Component1(AndroidX.Activity.Result.ActivityResult! obj) -> int
 static AndroidX.Activity.Result.ActivityResultKt.Component2(AndroidX.Activity.Result.ActivityResult! obj) -> Android.Content.Intent?
 static AndroidX.Activity.Result.ActivityResultLauncherKt.Launch(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherKt.LaunchUnit(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
-static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<AndroidX.Activity.Result.ActivityResultUnit>! launcher, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
+static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<Java.Lang.Void!>! launcher, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<string!>! launcher, string! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<string![]!>! launcher, string![]! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch<TInput>(this AndroidX.Activity.Result.ActivityResultLauncher<TInput!>! launcher, TInput! input, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
