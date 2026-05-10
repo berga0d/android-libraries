@@ -4,7 +4,6 @@ using System;
 using Android.Content;
 using AndroidX.Core.App;
 using Java.Interop;
-using RawActivityResultLauncher = AndroidX.Activity.Result.ActivityResultLauncher;
 using RawActivityResultContract = AndroidX.Activity.Result.Contract.ActivityResultContract;
 
 namespace AndroidX.Activity.Result
@@ -32,23 +31,40 @@ internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object,
 
 public sealed class ActivityResultLauncher<TInput>
 {
-    readonly RawActivityResultLauncher native;
-    readonly Func<TInput?, Java.Lang.Object?> inputConverter;
+    internal global::AndroidX.Activity.Result.ActivityResultLauncher Native { get; }
 
-    internal ActivityResultLauncher(RawActivityResultLauncher native, Func<TInput?, Java.Lang.Object?> inputConverter)
-    {
-        this.native = native ?? throw new ArgumentNullException(nameof(native));
-        this.inputConverter = inputConverter ?? throw new ArgumentNullException(nameof(inputConverter));
-    }
-
-    public void Launch(TInput? input)
-        => native.Launch(inputConverter(input));
-
-    public void Launch(TInput? input, ActivityOptionsCompat? options)
-        => native.Launch(inputConverter(input), options);
+    internal ActivityResultLauncher(global::AndroidX.Activity.Result.ActivityResultLauncher native)
+        => Native = native ?? throw new ArgumentNullException(nameof(native));
 
     public void Unregister()
-        => native.Unregister();
+        => Native.Unregister();
+}
+
+public static class ActivityResultLauncherTypedExtensions
+{
+    public static void Launch<TInput>(
+        this ActivityResultLauncher<TInput> launcher,
+        TInput input,
+        ActivityOptionsCompat? options = null)
+        where TInput : Java.Lang.Object
+        => launcher.Native.Launch(input, options);
+
+    public static void Launch(
+        this ActivityResultLauncher<string> launcher,
+        string input,
+        ActivityOptionsCompat? options = null)
+        => launcher.Native.Launch(input is null ? null : new Java.Lang.String(input), options);
+
+    public static void Launch(
+        this ActivityResultLauncher<string[]> launcher,
+        string[] input,
+        ActivityOptionsCompat? options = null)
+        => launcher.Native.Launch(input is null ? null : new JavaArray<string>(input), options);
+
+    public static void Launch(
+        this ActivityResultLauncher<ActivityResultUnit> launcher,
+        ActivityOptionsCompat? options = null)
+        => launcher.Native.Launch(null, options);
 }
 
 }
@@ -95,7 +111,7 @@ public sealed class ActivityResultContract<TInput, TResult>
 
         var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = caller.RegisterForActivityResult(native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, inputConverter);
+        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
     public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> RegisterForActivityResult(global::AndroidX.Activity.Result.IActivityResultCaller caller, global::AndroidX.Activity.Result.ActivityResultRegistry registry, Action<TResult?> callback)
@@ -109,7 +125,7 @@ public sealed class ActivityResultContract<TInput, TResult>
 
         var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = caller.RegisterForActivityResult(native, registry, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, inputConverter);
+        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
     public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, Action<TResult?> callback)
@@ -121,7 +137,7 @@ public sealed class ActivityResultContract<TInput, TResult>
 
         var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = registry.Register(key, native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, inputConverter);
+        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
     public global::AndroidX.Activity.Result.ActivityResultLauncher<TInput> Register(global::AndroidX.Activity.Result.ActivityResultRegistry registry, string key, global::AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner, Action<TResult?> callback)
@@ -135,7 +151,7 @@ public sealed class ActivityResultContract<TInput, TResult>
 
         var callbackAdapter = new global::AndroidX.Activity.Result.ActivityResultCallbackAdapter<TResult>(callback, outputConverter);
         var launcher = registry.Register(key, lifecycleOwner, native, callbackAdapter);
-        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher, inputConverter);
+        return new global::AndroidX.Activity.Result.ActivityResultLauncher<TInput>(launcher);
     }
 
     static Java.Lang.Object? DefaultInputConverter(TInput? input)
