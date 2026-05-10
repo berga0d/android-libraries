@@ -225,7 +225,7 @@ public partial class ActivityResultContracts
         static Java.Lang.Object? StringArrayInputConverter(string[]? input)
             => input is null ? null : new JavaArray<string>(input);
 
-        static Java.Lang.Object? UnitInputConverter(global::AndroidX.Activity.Result.ActivityResultUnit _)
+        static Java.Lang.Object? UnitInputConverter(global::AndroidX.Activity.Result.ActivityResultUnit unit)
             => null;
 
         static Android.Net.Uri? UriOutputConverter(Java.Lang.Object? output)
