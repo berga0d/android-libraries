@@ -186,7 +186,7 @@ public sealed class ActivityResultContract<TInput, TResult>
 {
     internal AndroidX.Activity.Result.Contract.ActivityResultContract Native { get; }
 
-    public ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
+    internal ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
 }
 public partial class ActivityResultContracts
