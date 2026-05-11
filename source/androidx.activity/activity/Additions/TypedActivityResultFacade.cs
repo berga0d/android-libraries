@@ -188,6 +188,24 @@ public sealed class ActivityResultContract<TInput, TResult>
 
     internal ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
+
+    public Intent? CreateIntent(Context context, TInput input)
+    {
+        if (context is null)
+            throw new ArgumentNullException(nameof(context));
+
+        Java.Lang.Object? javaInput = input switch
+        {
+            null => null,
+            Java.Lang.Object value => value,
+            string value => value,
+            string[] value => value,
+            _ => throw new InvalidOperationException(
+                $"Unsupported activity result input type '{typeof(TInput)}'.")
+        };
+
+        return Native.CreateIntent(context, javaInput);
+    }
 }
 public partial class ActivityResultContracts
 {
