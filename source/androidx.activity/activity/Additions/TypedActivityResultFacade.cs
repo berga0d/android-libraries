@@ -44,16 +44,7 @@ public sealed class ActivityResultLauncher<TInput>
     internal ActivityResultLauncher(AndroidX.Activity.Result.ActivityResultLauncher native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
 
-    public void Unregister()
-        => Native.Unregister();
-}
-
-public static class ActivityResultLauncherTypedExtensions
-{
-    public static void Launch<TInput>(
-        this ActivityResultLauncher<TInput> launcher,
-        TInput input,
-        ActivityOptionsCompat? options = null)
+    public void Launch(TInput input, ActivityOptionsCompat? options = null)
     {
         Java.Lang.Object? javaInput = input switch
         {
@@ -65,13 +56,11 @@ public static class ActivityResultLauncherTypedExtensions
                 $"Unsupported activity result input type '{typeof(TInput)}'.")
         };
 
-        launcher.Native.Launch(javaInput, options);
+        Native.Launch(javaInput, options);
     }
 
-    public static void Launch(
-        this ActivityResultLauncher<Java.Lang.Void> launcher,
-        ActivityOptionsCompat? options = null)
-        => launcher.Native.Launch(null, options);
+    public void Unregister()
+        => Native.Unregister();
 }
 
 public static class ActivityResultCallerTypedExtensions
