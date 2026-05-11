@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using Android.Content;
 using Android.Runtime;
 using AndroidX.Core.App;
@@ -224,7 +225,7 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<string, Android.Net.Uri> GetContent()
             => new(new ActivityResultContracts.GetContent());
 
-        public static ActivityResultContract<string, Java.Util.IList> GetMultipleContents()
+        public static ActivityResultContract<string, IList<Android.Net.Uri>> GetMultipleContents()
             => new(new ActivityResultContracts.GetMultipleContents());
 
         public static ActivityResultContract<string[], Android.Net.Uri> OpenDocument()
@@ -233,22 +234,22 @@ public partial class ActivityResultContracts
         public static ActivityResultContract<Android.Net.Uri?, Android.Net.Uri> OpenDocumentTree()
             => new(new ActivityResultContracts.OpenDocumentTree());
 
-        public static ActivityResultContract<string[], Java.Util.IList> OpenMultipleDocuments()
+        public static ActivityResultContract<string[], IList<Android.Net.Uri>> OpenMultipleDocuments()
             => new(new ActivityResultContracts.OpenMultipleDocuments());
 
         public static ActivityResultContract<Java.Lang.Void, Android.Net.Uri> PickContact()
             => new(new ActivityResultContracts.PickContact());
 
-        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia()
+        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, IList<Android.Net.Uri>> PickMultipleVisualMedia()
             => new(new ActivityResultContracts.PickMultipleVisualMedia());
 
-        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Java.Util.IList> PickMultipleVisualMedia(int maxItems)
+        public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, IList<Android.Net.Uri>> PickMultipleVisualMedia(int maxItems)
             => new(new ActivityResultContracts.PickMultipleVisualMedia(maxItems));
 
         public static ActivityResultContract<AndroidX.Activity.Result.PickVisualMediaRequest, Android.Net.Uri> PickVisualMedia()
             => new(new ActivityResultContracts.PickVisualMedia());
 
-        public static ActivityResultContract<string[], Java.Util.IMap> RequestMultiplePermissions()
+        public static ActivityResultContract<string[], IDictionary<string, bool>> RequestMultiplePermissions()
             => new(new ActivityResultContracts.RequestMultiplePermissions());
 
         public static ActivityResultContract<string, bool> RequestPermission()
