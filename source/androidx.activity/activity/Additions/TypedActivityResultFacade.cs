@@ -74,21 +74,6 @@ public sealed class ActivityResultLauncher<TInput>
         Native.Launch(javaInput, options);
     }
 
-    public AndroidX.Activity.Result.Contract.ActivityResultContract<TInput> Contract
-    {
-        get
-        {
-            const string contractGetter = "getContract.()Landroidx/activity/result/contract/ActivityResultContract;";
-            unsafe
-            {
-                var contract = Native.JniPeerMembers.InstanceMethods.InvokeAbstractObjectMethod(contractGetter, Native, null);
-                return new(Java.Lang.Object.GetObject<AndroidX.Activity.Result.Contract.ActivityResultContract>(
-                    contract.Handle,
-                    JniHandleOwnership.TransferLocalRef)!);
-            }
-        }
-    }
-
     public void Unregister()
         => Native.Unregister();
 }
@@ -183,56 +168,12 @@ public static class ActivityResultRegistryTypedExtensions
 namespace AndroidX.Activity.Result.Contract
 {
 
-public sealed class ActivityResultContract<TInput>
-{
-    internal AndroidX.Activity.Result.Contract.ActivityResultContract Native { get; }
-
-    internal ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
-        => Native = native ?? throw new ArgumentNullException(nameof(native));
-
-    public Intent? CreateIntent(Context context, TInput input)
-    {
-        if (context is null)
-            throw new ArgumentNullException(nameof(context));
-
-        Java.Lang.Object? javaInput = input switch
-        {
-            null => null,
-            Java.Lang.Object value => value,
-            string value => value,
-            string[] value => value,
-            _ => throw new InvalidOperationException(
-                $"Unsupported activity result input type '{typeof(TInput)}'.")
-        };
-
-        return Native.CreateIntent(context, javaInput);
-    }
-}
-
 public sealed class ActivityResultContract<TInput, TResult>
 {
     internal AndroidX.Activity.Result.Contract.ActivityResultContract Native { get; }
 
     internal ActivityResultContract(AndroidX.Activity.Result.Contract.ActivityResultContract native)
         => Native = native ?? throw new ArgumentNullException(nameof(native));
-
-    public Intent? CreateIntent(Context context, TInput input)
-    {
-        if (context is null)
-            throw new ArgumentNullException(nameof(context));
-
-        Java.Lang.Object? javaInput = input switch
-        {
-            null => null,
-            Java.Lang.Object value => value,
-            string value => value,
-            string[] value => value,
-            _ => throw new InvalidOperationException(
-                $"Unsupported activity result input type '{typeof(TInput)}'.")
-        };
-
-        return Native.CreateIntent(context, javaInput);
-    }
 }
 public partial class ActivityResultContracts
 {

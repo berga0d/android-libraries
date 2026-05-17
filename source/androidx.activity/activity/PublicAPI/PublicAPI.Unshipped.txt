@@ -124,7 +124,6 @@ AndroidX.Activity.Result.ActivityResultLauncher
 AndroidX.Activity.Result.ActivityResultLauncher.ActivityResultLauncher() -> void
 AndroidX.Activity.Result.ActivityResultLauncher.ActivityResultLauncher(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>
-AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Contract.get -> AndroidX.Activity.Result.Contract.ActivityResultContract<TInput>!
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Launch(TInput input, AndroidX.Core.App.ActivityOptionsCompat? options = null) -> void
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Unregister() -> void
 AndroidX.Activity.Result.ActivityResultLauncherKt
@@ -145,9 +144,6 @@ AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.SynchronousResult(Java.Lang.Object? value) -> void
 AndroidX.Activity.Result.Contract.ActivityResultContract.SynchronousResult.Value.get -> Java.Lang.Object?
 AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>.CreateIntent(Android.Content.Context! context, TInput input) -> Android.Content.Intent?
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput>
-AndroidX.Activity.Result.Contract.ActivityResultContract<TInput>.CreateIntent(Android.Content.Context! context, TInput input) -> Android.Content.Intent?
 AndroidX.Activity.Result.Contract.ActivityResultContracts
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo
 AndroidX.Activity.Result.Contract.ActivityResultContracts.CaptureVideo.CaptureVideo() -> void
