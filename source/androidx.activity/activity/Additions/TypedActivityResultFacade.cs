@@ -31,6 +31,20 @@ internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object,
         if (typeof(TResult) == typeof(bool) && result is Java.Lang.Boolean javaBoolean)
             return (TResult?)(object)javaBoolean.BooleanValue();
 
+        if (typeof(TResult) == typeof(IList<Android.Net.Uri>))
+        {
+            return (TResult?)(object)Android.Runtime.JavaList<Android.Net.Uri>.FromJniHandle(
+                result.Handle,
+                JniHandleOwnership.DoNotTransfer)!;
+        }
+
+        if (typeof(TResult) == typeof(IDictionary<string, bool>))
+        {
+            return (TResult?)(object)Android.Runtime.JavaDictionary<string, bool>.FromJniHandle(
+                result.Handle,
+                JniHandleOwnership.DoNotTransfer)!;
+        }
+
         if (typeof(IJavaObject).IsAssignableFrom(typeof(TResult)))
             return result is TResult javaTyped ? javaTyped : default;
 
@@ -61,7 +75,19 @@ public sealed class ActivityResultLauncher<TInput>
     }
 
     public AndroidX.Activity.Result.Contract.ActivityResultContract<TInput> Contract
-        => new(Native.Contract);
+    {
+        get
+        {
+            const string contractGetter = "getContract.()Landroidx/activity/result/contract/ActivityResultContract;";
+            unsafe
+            {
+                var contract = Native.JniPeerMembers.InstanceMethods.InvokeAbstractObjectMethod(contractGetter, Native, null);
+                return new(Java.Lang.Object.GetObject<AndroidX.Activity.Result.Contract.ActivityResultContract>(
+                    contract.Handle,
+                    JniHandleOwnership.TransferLocalRef)!);
+            }
+        }
+    }
 
     public void Unregister()
         => Native.Unregister();
