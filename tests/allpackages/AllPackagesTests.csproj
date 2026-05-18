@@ -17,8 +17,4 @@
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="TypedActivityResultFacadeMainActivityTemplate.cs" />
-  </ItemGroup>
-
 </Project>
