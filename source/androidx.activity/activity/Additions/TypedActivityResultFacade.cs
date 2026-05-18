@@ -40,9 +40,9 @@ internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object,
 
         if (typeof(TResult) == typeof(IDictionary<string, bool>))
         {
-            return (TResult?)(object)Android.Runtime.JavaDictionary<string, bool>.FromJniHandle(
+            return (TResult?)(object)new Android.Runtime.JavaDictionary<string, bool>(
                 result.Handle,
-                JniHandleOwnership.DoNotTransfer)!;
+                JniHandleOwnership.DoNotTransfer);
         }
 
         if (typeof(IJavaObject).IsAssignableFrom(typeof(TResult)))
