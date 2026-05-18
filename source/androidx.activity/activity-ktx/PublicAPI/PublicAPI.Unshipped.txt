@@ -1,8 +1,8 @@
-#nullable enable
+﻿#nullable enable
 AndroidX.Activity.Result.ActivityResultCallerKtxTypedExtensions
 AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>
 AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch() -> void
 AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Launch(AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>.Unregister() -> void
-static AndroidX.Activity.Result.ActivityResultCallerKtxTypedExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, TInput! input, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput!>!
-static AndroidX.Activity.Result.ActivityResultCallerKtxTypedExtensions.RegisterForActivityResult<TInput,TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput!, TResult!>! contract, TInput! input, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput!>!
+static AndroidX.Activity.Result.ActivityResultCallerKtxTypedExtensions.RegisterForActivityResult<TInput, TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>! contract, AndroidX.Activity.Result.ActivityResultRegistry! registry, TInput input, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>!
+static AndroidX.Activity.Result.ActivityResultCallerKtxTypedExtensions.RegisterForActivityResult<TInput, TResult>(this AndroidX.Activity.Result.IActivityResultCaller! caller, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>! contract, TInput input, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultCallerLauncher<TInput>!

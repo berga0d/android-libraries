@@ -70,7 +70,9 @@ public class TypedActivityResultFacadeAppTests
 		RewriteProjectFile (proj_file);
 		WriteMainActivity (Path.Combine (case_dir, "MainActivity.cs"));
 		await PackActivityPackage ();
+		await PackActivityKtxPackage ();
 		await RunAndAssertSuccess ($"add package Xamarin.AndroidX.Activity --version {local_package_version} --no-restore", case_dir);
+		await RunAndAssertSuccess ($"add package Xamarin.AndroidX.Activity.Ktx --version {local_package_version} --no-restore", case_dir);
 
 		await RunAndAssertSuccess ($"build -c {configuration} -bl", case_dir, true);
 
@@ -113,6 +115,16 @@ public class TypedActivityResultFacadeAppTests
 	static Task PackActivityPackage ()
 	{
 		var project = Path.Combine (base_dir, "generated", "androidx.activity.activity", "androidx.activity.activity.csproj");
+		var output = Path.Combine (base_dir, "output");
+		return RunAndAssertSuccess (
+			$"pack \"{project}\" -c {configuration} -o \"{output}\" -noAutoResponse",
+			base_dir,
+			true);
+	}
+
+	static Task PackActivityKtxPackage ()
+	{
+		var project = Path.Combine (base_dir, "generated", "androidx.activity.activity-ktx", "androidx.activity.activity-ktx.csproj");
 		var output = Path.Combine (base_dir, "output");
 		return RunAndAssertSuccess (
 			$"pack \"{project}\" -c {configuration} -o \"{output}\" -noAutoResponse",

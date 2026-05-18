@@ -210,6 +210,23 @@ public class MainActivity : AndroidX.Activity.ComponentActivity
 				Require(uris.Count == 2, "PickMultipleVisualMedia(maxItems) should observe list mutations after dispatch.");
 			}),
 			CreatePickVisualMediaRequest());
+
+		AddKtxCase(
+			"ktx-request-permission",
+			testCaller.RegisterForActivityResult(
+				requestPermission,
+				"android.permission.CAMERA",
+				result => Require(result == true, "KTX RequestPermission should return bool true.")),
+			options: null);
+
+		AddKtxCase(
+			"ktx-get-content",
+			testCaller.RegisterForActivityResult(
+				getContent,
+				testRegistry,
+				"image/*",
+				result => RequireUri(result, "content://typed/get-content")),
+			ActivityOptionsCompat.MakeBasic());
 	}
 
 	void RunRegisteredLaunchers()
@@ -232,6 +249,15 @@ public class MainActivity : AndroidX.Activity.ComponentActivity
 
 	void AddRegistryWithLifecycleCase<TInput>(string name, ActivityResultLauncher<TInput> launcher, TInput input)
 		=> launchers.Add(new RegisteredLauncher(name, () => launcher.Launch(input), launcher.Unregister));
+
+	void AddKtxCase<TInput>(string name, ActivityResultCallerLauncher<TInput> launcher, ActivityOptionsCompat? options)
+		=> launchers.Add(new RegisteredLauncher(name, () =>
+		{
+			if (options is null)
+				launcher.Launch();
+			else
+				launcher.Launch(options);
+		}, launcher.Unregister));
 
 	static PickVisualMediaRequest CreatePickVisualMediaRequest()
 		=> new PickVisualMediaRequest.Builder().SetMaxItems(2).Build();
