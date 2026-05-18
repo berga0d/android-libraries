@@ -33,9 +33,9 @@ internal sealed class ActivityResultCallbackAdapter<TResult> : Java.Lang.Object,
 
         if (typeof(TResult) == typeof(IList<Android.Net.Uri>))
         {
-            return (TResult?)(object)Android.Runtime.JavaList<Android.Net.Uri>.FromJniHandle(
+            return (TResult?)(object)new Android.Runtime.JavaList<Android.Net.Uri>(
                 result.Handle,
-                JniHandleOwnership.DoNotTransfer)!;
+                JniHandleOwnership.DoNotTransfer);
         }
 
         if (typeof(TResult) == typeof(IDictionary<string, bool>))
