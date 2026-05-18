@@ -78,6 +78,19 @@ namespace AndroidX.Activity.Result
 			=> Native.Unregister ();
 	}
 
+	public static class ActivityResultLauncherTypedExtensions
+	{
+		public static void Launch (
+			this ActivityResultLauncher<Java.Lang.Void> launcher,
+			ActivityOptionsCompat? options = null)
+		{
+			if (launcher is null)
+				throw new ArgumentNullException (nameof (launcher));
+
+			launcher.Launch (null, options);
+		}
+	}
+
 	public static class ActivityResultCallerTypedExtensions
 	{
 		public static ActivityResultLauncher<TInput> RegisterForActivityResult<TInput, TResult> (

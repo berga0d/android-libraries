@@ -127,6 +127,7 @@ AndroidX.Activity.Result.ActivityResultLauncher<TInput>
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Launch(TInput input, AndroidX.Core.App.ActivityOptionsCompat? options = null) -> void
 AndroidX.Activity.Result.ActivityResultLauncher<TInput>.Unregister() -> void
 AndroidX.Activity.Result.ActivityResultLauncherKt
+AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions
 AndroidX.Activity.Result.ActivityResultRegistry
 AndroidX.Activity.Result.ActivityResultRegistry.ActivityResultRegistry() -> void
 AndroidX.Activity.Result.ActivityResultRegistry.ActivityResultRegistry(nint javaReference, Android.Runtime.JniHandleOwnership transfer) -> void
@@ -473,6 +474,7 @@ static AndroidX.Activity.Result.ActivityResultKt.Component1(AndroidX.Activity.Re
 static AndroidX.Activity.Result.ActivityResultKt.Component2(AndroidX.Activity.Result.ActivityResult! obj) -> Android.Content.Intent?
 static AndroidX.Activity.Result.ActivityResultLauncherKt.Launch(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
 static AndroidX.Activity.Result.ActivityResultLauncherKt.LaunchUnit(AndroidX.Activity.Result.ActivityResultLauncher! obj, AndroidX.Core.App.ActivityOptionsCompat? options) -> void
+static AndroidX.Activity.Result.ActivityResultLauncherTypedExtensions.Launch(this AndroidX.Activity.Result.ActivityResultLauncher<Java.Lang.Void!>! launcher, AndroidX.Core.App.ActivityOptionsCompat? options = null) -> void
 static AndroidX.Activity.Result.ActivityResultRegistryTypedExtensions.Register<TInput, TResult>(this AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>! contract, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput>!
 static AndroidX.Activity.Result.ActivityResultRegistryTypedExtensions.Register<TInput, TResult>(this AndroidX.Activity.Result.ActivityResultRegistry! registry, string! key, AndroidX.Lifecycle.ILifecycleOwner! lifecycleOwner, AndroidX.Activity.Result.Contract.ActivityResultContract<TInput, TResult>! contract, System.Action<TResult?>! callback) -> AndroidX.Activity.Result.ActivityResultLauncher<TInput>!
 static AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.Instance.get -> AndroidX.Activity.Result.Contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab!
